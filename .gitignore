@@ -3,6 +3,7 @@ dev_run.sh
 
 # secret key
 secrets.json
+Dockerfile
 
 # Editor
 .vscode/
