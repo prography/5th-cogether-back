@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from event.models import Event, Tag, Category
+from event.models import *
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -22,5 +22,6 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ['id', 'title', 'host', 'content', 'category',
-                  'image', 'created_at', 'updated_at', 'start_at',
+                  'photo', 'created_at', 'updated_at', 'start_at',
                   'end_at', 'external_link', 'location', 'tag']
+

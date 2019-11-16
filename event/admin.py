@@ -28,7 +28,6 @@ class EventAdmin(admin.ModelAdmin):
     search_fields = ['title']
 
 
-
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Event, EventAdmin)
