@@ -1,6 +1,10 @@
 # Docker
 dev_run.sh
 
+# Media
+media/
+
+
 # secret key
 secrets.json
 Dockerfile
