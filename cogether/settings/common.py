@@ -57,6 +57,7 @@ INSTALLED_APPS = [
 
     'corsheaders',
     'rest_framework',
+    'django_cleanup.apps.CleanupConfig',
 
     'event.apps.EventConfig',
 ]
@@ -145,6 +146,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'cogether', 'static'),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 CORS_ORIGIN_ALLOW_ALL = True
 
