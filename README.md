@@ -19,7 +19,7 @@
 * 0.0.1
     * 작업 진행 중
 
-## :couple_with_heart: 정보
+## :family: 정보
 
 김시현 - 
  
