@@ -48,6 +48,12 @@ class EventViewSet(viewsets.ModelViewSet):
                 else:
                     return Response(status=status.HTTP_404_NOT_FOUND)
 
+    # def create(self, request, *args, **kwargs):
+    #     return super().create(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        serializer.save(category_id=self.request.data['category_id'])
+
 
 def category_exist_or_not(category):
     try:

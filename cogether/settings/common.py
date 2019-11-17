@@ -102,6 +102,17 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+    # 'default': {
+    #     'NAME': 'postgres',
+    #     'PORT':'80',
+    #     'HOST': 'cogether.postgres.database.azure.com',
+    #     # 'app_data',
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     # 'django.db.backends.postgresql',
+    #     'USER': 'cogether@cogether',
+    #     # 'postgres_user',
+    #     'PASSWORD': '1q2w3e4r1!',
+    # }
 }
 
 

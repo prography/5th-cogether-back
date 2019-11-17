@@ -75,9 +75,6 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
-## sihyeon
-cogether/settings/common.py
-
 # Flask stuff:
 instance/
 .webassets-cache
