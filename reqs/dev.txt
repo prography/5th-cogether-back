@@ -1,1 +1,6 @@
 -r common.txt
+
+pytest-cov
+pytest-django
+model_mommy
+django-test-plus
