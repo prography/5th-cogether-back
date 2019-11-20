@@ -10,7 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import os, json
+import os
+import json
 from os.path import dirname, abspath
 from django.core.exceptions import ImproperlyConfigured
 
@@ -23,18 +24,21 @@ BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-secret_file = os.path.join(BASE_DIR, 'secrets.json') # secrets.json 파일 위치를 명시
+# Specify the location of the secrets.json file
+secret_file = os.path.join(BASE_DIR, 'secrets.json')
 
 with open(secret_file) as f:
     secrets = json.loads(f.read())
 
+
 def get_secret(setting, secrets=secrets):
-    """비밀 변수를 가져오거나 명시적 예외를 반환한다."""
+    # Get a private variable or return an explicit exception.
     try:
         return secrets[setting]
     except KeyError:
         error_msg = "Set the {} environment variable".format(setting)
         raise ImproperlyConfigured(error_msg)
+
 
 SECRET_KEY = get_secret("SECRET_KEY")
 
@@ -56,10 +60,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'corsheaders',
-    'rest_framework',
     'django_cleanup.apps.CleanupConfig',
+    'rest_framework',
+    'rest_framework.authtoken',
 
     'event.apps.EventConfig',
+    'accounts.apps.AccountsConfig'
 ]
 
 MIDDLEWARE = [
@@ -154,5 +160,9 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 20
+    'PAGE_SIZE': 20,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
 }

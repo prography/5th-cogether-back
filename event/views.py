@@ -1,12 +1,12 @@
 # Django
 from django.shortcuts import get_object_or_404
 
-# Django-Rest_Framework
+# Django-Rest-Framework
 from rest_framework import generics, status, viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
-# local Django
+# Local Django
 from event.models import Category, Event
 from event.serializers import EventSerializer
 

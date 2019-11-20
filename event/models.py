@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import post_delete
+
 from cogether.utils import uuid_name_upload_to
 
 
