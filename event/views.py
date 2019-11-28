@@ -7,7 +7,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 # Local Django
-from event.models import Category, Event
+from event.models import Category, DevEvent
 from event.serializers import EventSerializer
 
 
@@ -22,7 +22,7 @@ class EventViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
-        queryset = Event.objects.all()
+        queryset = DevEvent.objects.all()
         category = self.request.query_params.get('category', None)
         if category is not None:
             category = get_object_or_404(Category, name=category)

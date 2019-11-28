@@ -2,33 +2,46 @@ from django.contrib import admin
 from .models import *
 
 
+@admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
-class EventTagInline(admin.TabularInline):
-    model = Event.tag.through
+@admin.register(FestaCrawling)
+class FestaCrawlingAdmin(admin.ModelAdmin):
+    pass
 
 
-class TagAdmin(admin.ModelAdmin):
-    inlines = [
-        EventTagInline,
-    ]
-
-    search_fields = ['name']
+@admin.register(MeetupCrawling)
+class MeetupCrawlingAdmin(admin.ModelAdmin):
+    pass
 
 
-class EventAdmin(admin.ModelAdmin):
-    exclude = ('tag',)
-
-    inlines = [
-        EventTagInline,
-    ]
-    
-    search_fields = ['title']
+@admin.register(EventusCrawling)
+class EventusCrawlingAdmin(admin.ModelAdmin):
+    pass
 
 
-admin.site.register(Category, CategoryAdmin)
-admin.site.register(Tag, TagAdmin)
-admin.site.register(Event, EventAdmin)
-admin.site.register(EventTag)
+@admin.register(FacebookCrawling)
+class FacebookCrawlingAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(UserrequestEvent)
+class UserrequestEventAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(WaitingEvent)
+class WaitingEventAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(DevEvent)
+class DevEventAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(NotDevEvent)
+class NotDevEvent(admin.ModelAdmin):
+    pass
