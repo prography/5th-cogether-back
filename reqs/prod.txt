@@ -2,5 +2,3 @@
 
 uwsgi
 psycopg2
-
-django-storages
