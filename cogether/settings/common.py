@@ -63,9 +63,10 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'rest_framework',
     'rest_framework.authtoken',
+    'storages',
 
     'event.apps.EventConfig',
-    'accounts.apps.AccountsConfig'
+    'account.apps.AccountConfig',
 ]
 
 MIDDLEWARE = [
@@ -157,6 +158,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+AUTH_USER_MODEL = 'account.MyUser'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
