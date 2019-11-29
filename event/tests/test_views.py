@@ -3,7 +3,7 @@ from model_bakery import baker
 from cogether.tests.testcase import TestCase
 
 
-class TestBoardVies(TestCase):
+class TestBoardViews(TestCase):
     def setUp(self):
         pass
 
