@@ -6,7 +6,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls'), name='rest_framework'),
-    path('event/', include('event.urls', 'event')),
+    path('event/', include('event.urls'), name='event'),
     path('account/', include('account.urls')),
 ]
 

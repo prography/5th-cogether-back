@@ -9,12 +9,24 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['name']
 
 
+def exist_category(value):
+    try:
+        Category.objects.get(name=value.get('name'))
+    except:
+        raise serializers.ValidationError('Does not exist category.')
+
+
 class EventSerializer(serializers.ModelSerializer):
-    category = CategorySerializer()
+    category = CategorySerializer(read_only=False, validators=[exist_category])
 
     class Meta:
         model = DevEvent
         fields = ['id', 'title', 'host', 'content', 'category',
                   'photo', 'created_at', 'updated_at', 'start_at',
-                  'end_at', 'external_link', 'location',]
+                  'end_at', 'external_link', 'location', ]
 
+    def create(self, validated_data):
+        category_name = validated_data.pop('category').get('name')
+        category = Category.objects.get(name=category_name)
+        instance = DevEvent.objects.create(category=category, **validated_data)
+        return instance
