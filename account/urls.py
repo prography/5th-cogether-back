@@ -5,7 +5,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 from account import views
 
-
+app_name = 'account'
 router = DefaultRouter()
 router.register(r'', views.MyUserViewSet, 'account')
 
