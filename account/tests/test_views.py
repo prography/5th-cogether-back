@@ -18,4 +18,5 @@ class TestAccountViews(TestCase):
         self.assertEqual(resp.json()['results'][0]['id'], self.user1.id)
 
     def test_create_account(self):
+        """ create test 추가"""
         pass
