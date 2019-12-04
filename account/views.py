@@ -1,6 +1,7 @@
 import requests
 import json
 import re
+import urllib.parse
 from uuid import uuid4
 
 from django.shortcuts import redirect
@@ -35,14 +36,16 @@ class MyUserViewSet(viewsets.ModelViewSet):
 
 
 def github_login(request):
-    url = 'https://github.com/login/oauth/authorize'
+    url = 'https://github.com/login/oauth/authorize/'
     payload = {
         'client_id': '7ca42cd1744a91380d69',
         'scope': 'read:user',
         'redirect_uri': 'http://127.0.0.1:8000/account/login/github/callback/',
     }
-    url_for_coode = making_url(url, payload)
-    return redirect(url_for_coode)
+    params = urllib.parse.urlencode(payload)
+    url_for_code_request = f"{url}?{params}"
+    return redirect(url_for_code_request)
+
 
 @api_view(('GET',))
 def github_login_callback(request):
@@ -73,7 +76,7 @@ def github_login_callback(request):
             token, created = Token.objects.get_or_create(user=user)
             return Response({'token': token.key})
         else:
-            return Response({'message' :'This email has already been used to login ' + user.login_method + ' Please login using ' + user.login_method}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'This email has already been used to login ' + user.login_method + ' Please login using ' + user.login_method}, status=status.HTTP_400_BAD_REQUEST)
     except MyUser.DoesNotExist:
         avatar = requests.get(user_json['avatar_url'])
         image_extension = MIMETYPE[avatar.headers['Content-Type']]
@@ -84,10 +87,3 @@ def github_login_callback(request):
                          ContentFile(avatar.content), save=True)
     token, created = Token.objects.get_or_create(user=user)
     return Response({'token': token.key})
-
-
-def making_url(url, params):
-    result = url+'?'
-    for key, value in params.items():
-        result += key + '=' + value + '&'
-    return result[:-1]
