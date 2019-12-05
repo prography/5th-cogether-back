@@ -19,17 +19,6 @@ from account.serializers import MyUserSerializer
 from account.models import MyUser
 
 
-MIMETYPE = {
-    "image/bmp": '.bmp',
-    'image/gif': '.gif',
-    'image/vnd.microsoft.icon': '.ico',
-    'image/jpeg': '.jpg',
-    'image/png': '.png',
-    'image/svg+xml': '.svg',
-    'image/tiff': '.tif',
-    'image/webp': '.webp'}
-
-
 class MyUserViewSet(viewsets.ModelViewSet):
     serializer_class = MyUserSerializer
     queryset = MyUser.objects.all()
@@ -78,12 +67,11 @@ def github_login_callback(request):
         else:
             return Response({'message': 'This email has already been used to login ' + user.login_method + ' Please login using ' + user.login_method}, status=status.HTTP_400_BAD_REQUEST)
     except MyUser.DoesNotExist:
-        avatar = requests.get(user_json['avatar_url'])
-        image_extension = MIMETYPE[avatar.headers['Content-Type']]
-        user = MyUser.objects.create(username=user_json.get('email'),
-                                     nickname=user_json.get('login'),
-                                     login_method='github')
-        user.avatar.save(uuid4().hex[:4]+image_extension,
-                         ContentFile(avatar.content), save=True)
+        social_avatar = user_json.get('avatar_url')
+        user = MyUser.objects.create(
+            username=user_json.get('email'),
+            nickname=user_json.get('login'),
+            login_method='github',
+            social_avatar=social_avatar)
     token, created = Token.objects.get_or_create(user=user)
     return Response({'token': token.key})
