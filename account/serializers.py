@@ -4,7 +4,6 @@ from rest_framework import serializers
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
-from rest_framework_simplejwt.serializers import TokenObtainSerializer, PasswordField
 
 
 MyUser = get_user_model()

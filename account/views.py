@@ -5,10 +5,11 @@ import os
 import urllib.parse
 from uuid import uuid4
 
-from django.shortcuts import redirect
-from django.http.response import HttpResponseBadRequest
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.contrib.auth import get_user_model
+from django.shortcuts import redirect
+from django.http.response import HttpResponseBadRequest
 
 from rest_framework import viewsets
 from rest_framework import status
@@ -21,11 +22,11 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from account.serializers import MyUserSerializer
 
-from django.conf import settings
 
 MyUser = get_user_model()
 GITHUB_CLIENT_ID = settings.GITHUB_CLIENT_ID
 GITHUB_CLIENT_SECRET = settings.GITHUB_CLIENT_SECRET
+
 
 class MyUserViewSet(viewsets.ModelViewSet):
     serializer_class = MyUserSerializer
