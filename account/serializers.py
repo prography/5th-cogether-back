@@ -1,10 +1,12 @@
-from account.models import MyUser
+from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 
+
+MyUser = get_user_model()
 
 class MyUserSerializer(serializers.ModelSerializer):
     username = serializers.EmailField(required=True)

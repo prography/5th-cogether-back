@@ -1,22 +1,31 @@
 import requests
 import json
 import re
+import os
 import urllib.parse
 from uuid import uuid4
 
+from django.conf import settings
+from django.core.files.base import ContentFile
+from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
 from django.http.response import HttpResponseBadRequest
-from django.core.files.base import ContentFile
 
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.decorators import APIView
 from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, renderer_classes
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from account.serializers import MyUserSerializer
-from account.models import MyUser
+
+
+MyUser = get_user_model()
+GITHUB_CLIENT_ID = settings.GITHUB_CLIENT_ID
+GITHUB_CLIENT_SECRET = settings.GITHUB_CLIENT_SECRET
 
 
 class MyUserViewSet(viewsets.ModelViewSet):
@@ -27,7 +36,7 @@ class MyUserViewSet(viewsets.ModelViewSet):
 def github_login(request):
     url = 'https://github.com/login/oauth/authorize/'
     payload = {
-        'client_id': '7ca42cd1744a91380d69',
+        'client_id': GITHUB_CLIENT_ID,
         'scope': 'read:user',
         'redirect_uri': 'http://127.0.0.1:8000/account/login/github/callback/',
     }
@@ -40,8 +49,8 @@ def github_login(request):
 def github_login_callback(request):
     code = request.GET.get('code', '')
     payload = {
-        'client_id': '7ca42cd1744a91380d69',
-        'client_secret': 'b1bd734a65259b18f18882fab23df7c727434e32',
+        'client_id': GITHUB_CLIENT_ID,
+        'client_secret': GITHUB_CLIENT_SECRET,
         'code': code,
     }
     headers = {'Accept': 'application/json', }
@@ -62,8 +71,11 @@ def github_login_callback(request):
     try:
         user = MyUser.objects.get(username=user_json.get('email'))
         if user.login_method == 'github':
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key})
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            }, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'This email has already been used to login ' + user.login_method + ' Please login using ' + user.login_method}, status=status.HTTP_400_BAD_REQUEST)
     except MyUser.DoesNotExist:
@@ -73,5 +85,8 @@ def github_login_callback(request):
             nickname=user_json.get('login'),
             login_method='github',
             social_avatar=social_avatar)
-    token, created = Token.objects.get_or_create(user=user)
-    return Response({'token': token.key})
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }, status=status.HTTP_201_CREATED)
