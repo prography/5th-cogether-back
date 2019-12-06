@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager as AuthUserManager
 
-from cogether.utils import uuid_name_upload_to
+from cogether.utils import uuid_name_upload_to, avatar_upload_to
 
 from django.conf import settings
 from django.db import models
@@ -41,7 +41,8 @@ class MyUser(AbstractUser):
     )
 
     avatar = models.ImageField(
-        upload_to=uuid_name_upload_to, null=True, blank=True)
+        upload_to=avatar_upload_to, null=True, blank=True)
+    social_avatar = models.URLField(blank=True)
     nickname = models.CharField(max_length=20, default='', blank=True)
     login_method = models.CharField(
         max_length=50, choices=LOGIN_CHOICES, default=LOGIN_EMAIL)
