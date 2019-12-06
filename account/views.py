@@ -38,7 +38,6 @@ def github_login(request):
     payload = {
         'client_id': GITHUB_CLIENT_ID,
         'scope': 'read:user',
-        'redirect_uri': 'http://127.0.0.1:8000/account/login/github/callback/',
     }
     params = urllib.parse.urlencode(payload)
     url_for_code_request = f"{url}?{params}"
