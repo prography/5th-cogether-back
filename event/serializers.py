@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from event.models import *
+from event.models import Category, DevEvent
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -16,7 +16,7 @@ def exist_category(value):
         raise serializers.ValidationError('Does not exist category.')
 
 
-class EventSerializer(serializers.ModelSerializer):
+class DevEventSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=False, validators=[exist_category])
 
     class Meta:

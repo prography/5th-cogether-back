@@ -8,7 +8,7 @@ from event import views
 app_name = 'event'
 
 router = DefaultRouter()
-router.register(r'', views.EventViewSet, basename='event')
+router.register(r'', views.DevEventViewSet, basename='event')
 
 urlpatterns = [
     path('', include(router.urls)),

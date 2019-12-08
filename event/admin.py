@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import *
+from event.models import (Category, FestaCrawling, MeetupCrawling,
+                          EventusCrawling, FacebookCrawling, UserrequestEvent,
+                          WaitingEvent, DevEvent, NotDevEvent)
 
 
 @admin.register(Category)
