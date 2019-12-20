@@ -67,6 +67,8 @@ INSTALLED_APPS = [
 
     'event.apps.EventConfig',
     'account.apps.AccountConfig',
+    'help.apps.HelpConfig',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
