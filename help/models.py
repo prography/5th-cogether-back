@@ -20,8 +20,8 @@ DATA_ATTR = [
     (MY, 'my-questions'),
 ]
 
-WT = 'freq'
-CMP = 'my'
+WT = 'waiting'
+CMP = 'completed'
 
 DATA_STATUS = [
     (WT, 'waiting'),

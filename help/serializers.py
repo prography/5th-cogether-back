@@ -7,8 +7,9 @@ class HelpCenterSerializer(serializers.ModelSerializer):
     class Meta:
         model = HelpCenter
         fields = ('id', 'contents', 'title', 'source',
-                  'created_at', 'updated_at', 'status')
-        read_only_fields = ('id',)
+                  'created_at', 'updated_at', 'status',
+                  'answered_by', 'answer', 'user')
+        read_only_fields = ('id', 'user')
 
 
 class HelpInfoSerializer(serializers.ModelSerializer):
