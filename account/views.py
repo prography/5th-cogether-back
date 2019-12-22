@@ -59,6 +59,9 @@ def github_login_callback(request):
         return HttpResponseBadRequest('GitHub login failed for unknown reasons.' + res.status_code)
     user_json = res.json()
 
+    if user_json.get('email') is None:
+        return Response({'message': '해당 계정은 Public email이 등록되어 있지 않습니다. https://github.com/settings/profile 에서 Public email을 등록해주세요.'}, status=status.HTTP_400_BAD_REQUEST)
+
     try:
         user = MyUser.objects.get(username=user_json.get('email'))
         if user.login_method == 'github':
