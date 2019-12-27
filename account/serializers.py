@@ -5,6 +5,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 MyUser = get_user_model()
 
@@ -33,3 +35,20 @@ class MyUserSerializer(serializers.ModelSerializer):
             user.set_password(password1)
             user.save()
             return user
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['avatar'] = ''
+        if user.avatar.name:
+            token['avatar'] = user.avatar.url
+        token['social_avatar'] = user.social_avatar
+        token['nickname'] = user.nickname
+        token['username'] = user.username
+        token['login_method'] = user.login_method
+        
+        return token
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
