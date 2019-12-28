@@ -16,11 +16,10 @@ from rest_framework import status
 from rest_framework.decorators import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, renderer_classes
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
 
-from account.serializers import MyUserSerializer
+from account.serializers import MyUserSerializer, MyTokenObtainPairSerializer
 
 
 MyUser = get_user_model()
@@ -67,10 +66,13 @@ def github_login_callback(request):
         return HttpResponseBadRequest('GitHub login failed for unknown reasons.' + res.status_code)
     user_json = res.json()
 
+    if user_json.get('email') is None:
+        return Response({'message': '해당 계정은 Public email이 등록되어 있지 않습니다. https://github.com/settings/profile 에서 Public email을 등록해주세요.'}, status=status.HTTP_400_BAD_REQUEST)
+
     try:
         user = MyUser.objects.get(username=user_json.get('email'))
         if user.login_method == 'github':
-            refresh = RefreshToken.for_user(user)
+            refresh = MyTokenObtainPairSerializer.get_token(user)
             return Response({
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
@@ -84,8 +86,11 @@ def github_login_callback(request):
             nickname=user_json.get('login'),
             login_method='github',
             social_avatar=social_avatar)
-        refresh = RefreshToken.for_user(user)
+        refresh = MyTokenObtainPairSerializer.get_token(user)
         return Response({
             'refresh': str(refresh),
             'access': str(refresh.access_token),
         }, status=status.HTTP_201_CREATED)
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
