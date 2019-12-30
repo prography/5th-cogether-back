@@ -31,7 +31,8 @@ class FestaCrawling(models.Model):
     title = models.CharField(max_length=100)
     host = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField(blank=True)
-    photo = models.ImageField(blank=True, null=True, upload_to=uuid_name_upload_to)
+    photo = models.ImageField(blank=True, null=True,
+                              upload_to=uuid_name_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     start_at = models.DateTimeField(blank=True, null=True)
@@ -54,7 +55,8 @@ class MeetupCrawling(models.Model):
     title = models.CharField(max_length=100)
     host = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField(blank=True)
-    photo = models.ImageField(blank=True, null=True, upload_to=uuid_name_upload_to)
+    photo = models.ImageField(blank=True, null=True,
+                              upload_to=uuid_name_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     start_at = models.DateTimeField(blank=True, null=True)
@@ -77,7 +79,8 @@ class EventusCrawling(models.Model):
     title = models.CharField(max_length=100)
     host = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField(blank=True)
-    photo = models.ImageField(blank=True, null=True, upload_to=uuid_name_upload_to)
+    photo = models.ImageField(blank=True, null=True,
+                              upload_to=uuid_name_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     start_at = models.DateTimeField(blank=True, null=True)
@@ -100,7 +103,8 @@ class FacebookCrawling(models.Model):
     title = models.CharField(max_length=100)
     host = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField(blank=True)
-    photo = models.ImageField(blank=True, null=True, upload_to=uuid_name_upload_to)
+    photo = models.ImageField(blank=True, null=True,
+                              upload_to=uuid_name_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     start_at = models.DateTimeField(blank=True, null=True)
@@ -123,7 +127,8 @@ class ManualEvent(models.Model):
     title = models.CharField(max_length=100)
     host = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField(blank=True)
-    photo = models.ImageField(blank=True, null=True, upload_to=uuid_name_upload_to)
+    photo = models.ImageField(blank=True, null=True,
+                              upload_to=uuid_name_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     start_at = models.DateTimeField(blank=True, null=True)
@@ -147,7 +152,8 @@ class UserrequestEvent(models.Model):
     host = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField(blank=True)
     description = models.TextField(blank=True)
-    photo = models.ImageField(blank=True, null=True, upload_to=uuid_name_upload_to)
+    photo = models.ImageField(blank=True, null=True,
+                              upload_to=uuid_name_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     start_at = models.DateTimeField(blank=True, null=True)
@@ -170,7 +176,8 @@ class WaitingEvent(models.Model):
     title = models.CharField(max_length=100)
     host = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField(blank=True)
-    photo = models.ImageField(blank=True, null=True, upload_to=uuid_name_upload_to)
+    photo = models.ImageField(blank=True, null=True,
+                              upload_to=uuid_name_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     start_at = models.DateTimeField(blank=True, null=True)
@@ -193,7 +200,8 @@ class DevEvent(models.Model):
     title = models.CharField(max_length=100)
     host = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField(blank=True)
-    photo = models.ImageField(blank=True, null=True, upload_to=uuid_name_upload_to)
+    photo = models.ImageField(blank=True, null=True,
+                              upload_to=uuid_name_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     start_at = models.DateTimeField(blank=True, null=True)
@@ -216,7 +224,8 @@ class NotDevEvent(models.Model):
     title = models.CharField(max_length=100)
     host = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField(blank=True)
-    photo = models.ImageField(blank=True, null=True, upload_to=uuid_name_upload_to)
+    photo = models.ImageField(blank=True, null=True,
+                              upload_to=uuid_name_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     start_at = models.DateTimeField(blank=True, null=True)
@@ -226,7 +235,8 @@ class NotDevEvent(models.Model):
 
     external_link = models.URLField(blank=True)
     location = models.CharField(max_length=200, blank=True)
-    source = models.CharField(max_length=30, choices=DATA_SOURCE, default=USERREQUEST)
+    source = models.CharField(
+        max_length=30, choices=DATA_SOURCE, default=USERREQUEST)
 
     class Meta:
         ordering = ['start_at']
