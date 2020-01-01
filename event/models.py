@@ -40,7 +40,7 @@ class FestaCrawling(models.Model):
     external_link = models.URLField(blank=True)
     location = models.CharField(max_length=200, blank=True)
     source = models.CharField(max_length=30, choices=DATA_SOURCE, default=FESTA)
-    
+
     class Meta:
         ordering = ['start_at']
     
@@ -63,7 +63,7 @@ class MeetupCrawling(models.Model):
     external_link = models.URLField(blank=True)
     location = models.CharField(max_length=200, blank=True)
     source = models.CharField(max_length=30, choices=DATA_SOURCE, default=MEETUP)
-    
+
     class Meta:
         ordering = ['start_at']
     
@@ -86,7 +86,7 @@ class EventusCrawling(models.Model):
     external_link = models.URLField(blank=True)
     location = models.CharField(max_length=200, blank=True)
     source = models.CharField(max_length=30, choices=DATA_SOURCE, default=EVENTUS)
-    
+
     class Meta:
         ordering = ['start_at']
     
@@ -109,7 +109,7 @@ class FacebookCrawling(models.Model):
     external_link = models.URLField(blank=True)
     location = models.CharField(max_length=200, blank=True)
     source = models.CharField(max_length=30, choices=DATA_SOURCE, default=FACEBOOK)
-    
+
     class Meta:
         ordering = ['start_at']
     
@@ -132,7 +132,7 @@ class ManualEvent(models.Model):
     external_link = models.URLField(blank=True)
     location = models.CharField(max_length=200, blank=True)
     source = models.CharField(max_length=30, choices=DATA_SOURCE, default=MANUAL)
-    
+
     class Meta:
         ordering = ['start_at']
     
@@ -156,7 +156,7 @@ class UserrequestEvent(models.Model):
     external_link = models.URLField(blank=True)
     location = models.CharField(max_length=200, blank=True)
     source = models.CharField(max_length=30, choices=DATA_SOURCE, default=USERREQUEST)
-    
+
     class Meta:
         ordering = ['start_at']
     
@@ -179,7 +179,7 @@ class WaitingEvent(models.Model):
     external_link = models.URLField(blank=True)
     location = models.CharField(max_length=200, blank=True)
     source = models.CharField(max_length=30, choices=DATA_SOURCE, default=FACEBOOK)
-    
+
     class Meta:
         ordering = ['start_at']
     
@@ -202,7 +202,7 @@ class DevEvent(models.Model):
     external_link = models.URLField(blank=True)
     location = models.CharField(max_length=200, blank=True)
     source = models.CharField(max_length=30, choices=DATA_SOURCE, default=USERREQUEST)
-    
+
     class Meta:
         ordering = ['start_at']
     
