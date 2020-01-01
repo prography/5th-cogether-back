@@ -9,7 +9,7 @@ class HelpCenterSerializer(serializers.ModelSerializer):
         fields = ('id', 'contents', 'title', 'source',
                   'created_at', 'updated_at', 'status',
                   'answered_by', 'answer', 'user')
-        read_only_fields = ('id', 'user')
+        read_only_fields = ('id',)
 
 
 class HelpInfoSerializer(serializers.ModelSerializer):

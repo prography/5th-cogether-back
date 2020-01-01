@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from help.models import HelpCenter
+from help.models import HelpCenter, HelpInfo
 
 
 # Register your models here.
@@ -9,3 +9,4 @@ class HelpAdmin(admin.ModelAdmin):
 
 
 admin.site.register(HelpCenter, HelpAdmin)
+admin.site.register(HelpInfo)
