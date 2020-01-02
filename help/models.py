@@ -3,8 +3,8 @@ from django.conf import settings
 
 # Create your models here.
 HELP = 'help'
-UPDATEREQUEST = 'update_request'
-CREATEREQUEST = 'create_request'
+UPDATEREQUEST = 'update'
+CREATEREQUEST = 'create'
 
 DATA_SOURCE = [
     (HELP, 'help'),

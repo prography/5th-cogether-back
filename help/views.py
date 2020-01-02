@@ -1,8 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.shortcuts import render
 from rest_framework import viewsets, mixins
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.conf import settings
 
 from help.serializers import HelpCenterSerializer, HelpInfoSerializer
 from help.models import HelpCenter, FREQ, HelpInfo
@@ -16,7 +13,9 @@ class MyHelpCenterViewSet(viewsets.ModelViewSet):
         return HelpCenter.objects.filter(user=self.request.user.id)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        request_data = self.request.data['user']
+        my_user = get_user_model().objects.get(pk=request_data)
+        serializer.save(user=my_user)
 
 
 class FreqHelpCenterViewSet(viewsets.ModelViewSet):
