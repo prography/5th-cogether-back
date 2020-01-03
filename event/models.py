@@ -9,7 +9,6 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-
 MANUAL = 'manual'
 USERREQUEST = 'user_request'
 FESTA = 'festa_crawling'
@@ -26,15 +25,13 @@ DATA_SOURCE = [
     ('facebook', 'facebook_crawling'),
 ]
 
-
 class FestaCrawling(models.Model):
     title = models.CharField(max_length=100)
     host = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField(blank=True)
-    photo = models.ImageField(blank=True, null=True,
-                              upload_to=uuid_name_upload_to)
+    photo = models.ImageField(blank=True, null=True, upload_to=uuid_name_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
+    
     start_at = models.DateTimeField(blank=True, null=True)
     end_at = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -46,7 +43,7 @@ class FestaCrawling(models.Model):
 
     class Meta:
         ordering = ['start_at']
-
+    
     def __str__(self):
         return self.title
 
@@ -55,10 +52,9 @@ class MeetupCrawling(models.Model):
     title = models.CharField(max_length=100)
     host = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField(blank=True)
-    photo = models.ImageField(blank=True, null=True,
-                              upload_to=uuid_name_upload_to)
+    photo = models.ImageField(blank=True, null=True, upload_to=uuid_name_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
+    
     start_at = models.DateTimeField(blank=True, null=True)
     end_at = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -70,7 +66,7 @@ class MeetupCrawling(models.Model):
 
     class Meta:
         ordering = ['start_at']
-
+    
     def __str__(self):
         return self.title
 
@@ -79,10 +75,9 @@ class EventusCrawling(models.Model):
     title = models.CharField(max_length=100)
     host = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField(blank=True)
-    photo = models.ImageField(blank=True, null=True,
-                              upload_to=uuid_name_upload_to)
+    photo = models.ImageField(blank=True, null=True, upload_to=uuid_name_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
+    
     start_at = models.DateTimeField(blank=True, null=True)
     end_at = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -94,7 +89,7 @@ class EventusCrawling(models.Model):
 
     class Meta:
         ordering = ['start_at']
-
+    
     def __str__(self):
         return self.title
 
@@ -103,10 +98,9 @@ class FacebookCrawling(models.Model):
     title = models.CharField(max_length=100)
     host = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField(blank=True)
-    photo = models.ImageField(blank=True, null=True,
-                              upload_to=uuid_name_upload_to)
+    photo = models.ImageField(blank=True, null=True, upload_to=uuid_name_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
+    
     start_at = models.DateTimeField(blank=True, null=True)
     end_at = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -118,7 +112,7 @@ class FacebookCrawling(models.Model):
 
     class Meta:
         ordering = ['start_at']
-
+    
     def __str__(self):
         return self.title
 
@@ -127,10 +121,9 @@ class ManualEvent(models.Model):
     title = models.CharField(max_length=100)
     host = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField(blank=True)
-    photo = models.ImageField(blank=True, null=True,
-                              upload_to=uuid_name_upload_to)
+    photo = models.ImageField(blank=True, null=True, upload_to=uuid_name_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
+    
     start_at = models.DateTimeField(blank=True, null=True)
     end_at = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -142,7 +135,7 @@ class ManualEvent(models.Model):
 
     class Meta:
         ordering = ['start_at']
-
+    
     def __str__(self):
         return self.title
 
@@ -152,10 +145,9 @@ class UserrequestEvent(models.Model):
     host = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField(blank=True)
     description = models.TextField(blank=True)
-    photo = models.ImageField(blank=True, null=True,
-                              upload_to=uuid_name_upload_to)
+    photo = models.ImageField(blank=True, null=True, upload_to=uuid_name_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
+    
     start_at = models.DateTimeField(blank=True, null=True)
     end_at = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -167,7 +159,7 @@ class UserrequestEvent(models.Model):
 
     class Meta:
         ordering = ['start_at']
-
+    
     def __str__(self):
         return self.title
 
@@ -176,10 +168,9 @@ class WaitingEvent(models.Model):
     title = models.CharField(max_length=100)
     host = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField(blank=True)
-    photo = models.ImageField(blank=True, null=True,
-                              upload_to=uuid_name_upload_to)
+    photo = models.ImageField(blank=True, null=True, upload_to=uuid_name_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
+    
     start_at = models.DateTimeField(blank=True, null=True)
     end_at = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -191,7 +182,7 @@ class WaitingEvent(models.Model):
 
     class Meta:
         ordering = ['start_at']
-
+    
     def __str__(self):
         return self.title
 
@@ -200,10 +191,9 @@ class DevEvent(models.Model):
     title = models.CharField(max_length=100)
     host = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField(blank=True)
-    photo = models.ImageField(blank=True, null=True,
-                              upload_to=uuid_name_upload_to)
+    photo = models.ImageField(blank=True, null=True, upload_to=uuid_name_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
+    
     start_at = models.DateTimeField(blank=True, null=True)
     end_at = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -215,7 +205,7 @@ class DevEvent(models.Model):
 
     class Meta:
         ordering = ['start_at']
-
+    
     def __str__(self):
         return self.title
 
@@ -224,10 +214,9 @@ class NotDevEvent(models.Model):
     title = models.CharField(max_length=100)
     host = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField(blank=True)
-    photo = models.ImageField(blank=True, null=True,
-                              upload_to=uuid_name_upload_to)
+    photo = models.ImageField(blank=True, null=True, upload_to=uuid_name_upload_to)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
+    
     start_at = models.DateTimeField(blank=True, null=True)
     end_at = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -235,11 +224,10 @@ class NotDevEvent(models.Model):
 
     external_link = models.URLField(blank=True)
     location = models.CharField(max_length=200, blank=True)
-    source = models.CharField(
-        max_length=30, choices=DATA_SOURCE, default=USERREQUEST)
+    source = models.CharField(max_length=30, choices=DATA_SOURCE, default=USERREQUEST)
 
     class Meta:
         ordering = ['start_at']
-
+    
     def __str__(self):
         return self.title

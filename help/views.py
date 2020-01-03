@@ -1,20 +1,21 @@
-from django.shortcuts import render
+from django.contrib.auth import get_user_model
 from rest_framework import viewsets, mixins
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 from help.serializers import HelpCenterSerializer, HelpInfoSerializer
 from help.models import HelpCenter, FREQ, HelpInfo
 
 
 # Create your views here.
-class MyHelpCenterViewSet(viewsets.ModelViewSet): # LoginRequiredMixin,
+class MyHelpCenterViewSet(viewsets.ModelViewSet):
     serializer_class = HelpCenterSerializer
 
     def get_queryset(self):
-        return HelpCenter.objects.filter(user=self.request.user)
+        return HelpCenter.objects.filter(user=self.request.user.id)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        request_data = self.request.data['user']
+        my_user = get_user_model().objects.get(pk=request_data)
+        serializer.save(user=my_user)
 
 
 class FreqHelpCenterViewSet(viewsets.ModelViewSet):
