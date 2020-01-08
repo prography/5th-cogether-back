@@ -18,6 +18,8 @@ class DevEventViewSet(viewsets.ModelViewSet):
     queryset = DevEvent.objects.all()
     serializer_class = DevEventSerializer
     pagination_class = StandardResultsSetPagination
+    http_method_names = ['get']
+
 
     def get_queryset(self):
         queryset = DevEvent.objects.all()
