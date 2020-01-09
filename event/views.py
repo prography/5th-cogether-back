@@ -15,14 +15,14 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 
 class DevEventViewSet(viewsets.ModelViewSet):
-    queryset = DevEvent.objects.all()
+    queryset = DevEvent.objects.filter(status='development')
     serializer_class = DevEventSerializer
     pagination_class = StandardResultsSetPagination
     http_method_names = ['get']
 
 
     def get_queryset(self):
-        queryset = DevEvent.objects.all()
+        queryset = DevEvent.objects.filter(status='development')
         category = self.request.query_params.get('category', None)
         title = self.request.query_params.get('title', None)
         if category is not None:
