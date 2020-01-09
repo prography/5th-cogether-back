@@ -1,6 +1,16 @@
 """
 MEETUP API: https://www.meetup.com/ko-KR/meetup_api/
 """
+import os
+import sys
+sys.path.append('..')
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cogether.settings.dev")
+
+import django
+django.setup()
+
+
 from event.models import Category, Photo, DevEvent
 import requests
 from datetime import datetime, timedelta
@@ -38,13 +48,13 @@ def save_new_events_from_meetup_dev_group(korea_meetup_dev_group):
         response = requests.get(url)
         response_json = response.json()
         for event in range(len(response_json)):
+            event_dict = set_devevent_field_to_dict(response_json)
+
             category_instance = Category.objects.get(name='conference')
+            event_dict['category'] = category_instance
 
             photo_instance = get_photo_instance(response_json)
-
-            event_dict = set_devevent_field_to_dict(response_json)
             event_dict['photo'] = photo_instance
-            event_dict['category'] = category_instance
 
             if not_exists_event(event_dict['original_identity']):
                 meetup_crawling_event = DevEvent(**event_dict)
@@ -89,8 +99,6 @@ def set_devevent_field_to_dict(response_json):
 
     start_at, end_at = get_start_and_end_time(response_json[0])
     venue = get_venue(response_json[0].get('venue'))
-    photo_url = get_photo_url(response_json[0].get(
-        'group'), response_json[0].get('featured_photo'))
 
     event_dict['original_identity'] = response_json[0]['id']
     event_dict['title'] = response_json[0]['name']
