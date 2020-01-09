@@ -43,8 +43,8 @@ UNCLASSIFIED_EVENTS = 'unclassified_events'
 
 
 EVENT_STATUS = [
-    (EVENT_RELATED_TO_DEVELOPMENT, '개발 관련 행사'),
-    (EVENT_NOT_RELATED_TO_DEVELOPMENT, '비개발 관련 행사'),
+    (EVENT_RELATED_TO_DEVELOPMENT, '개발 행사'),
+    (EVENT_NOT_RELATED_TO_DEVELOPMENT, '비개발 행사'),
     (UNCLASSIFIED_EVENTS, '미분류 행사'),
 ]
 
