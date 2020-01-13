@@ -33,7 +33,7 @@ EVENT_SOURCE = [
     (USERREQUEST, '사용자 요청'),
     (FESTA, 'FESTA 크롤링'),
     (MEETUP, 'MEETUP 크롤링'),
-    (MEETUP, 'EVENTUS 크롤링'),
+    (EVENTUS, 'EVENTUS 크롤링'),
     (FACEBOOK, 'FACEBOOK 크롤링'),
 ]
 
