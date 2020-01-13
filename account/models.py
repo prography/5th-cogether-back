@@ -9,6 +9,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
+from event.models import DevEvent
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
@@ -46,5 +47,6 @@ class MyUser(AbstractUser):
     nickname = models.CharField(max_length=20, default='', blank=True)
     login_method = models.CharField(
         max_length=50, choices=LOGIN_CHOICES, default=LOGIN_EMAIL)
+    like_events = models.ManyToManyField(DevEvent, related_name='like_event')
 
     objects = MyUserManager()

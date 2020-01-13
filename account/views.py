@@ -13,14 +13,15 @@ from django.http.response import HttpResponseBadRequest
 
 from rest_framework import viewsets
 from rest_framework import status
-from rest_framework.decorators import APIView
+from rest_framework.decorators import APIView, action
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from account.serializers import MyUserSerializer, MyTokenObtainPairSerializer
-
+from event.serializers import DevEventSerializer
 
 MyUser = get_user_model()
 GITHUB_CLIENT_ID = settings.GITHUB_CLIENT_ID
@@ -30,6 +31,14 @@ GITHUB_CLIENT_SECRET = settings.GITHUB_CLIENT_SECRET
 class MyUserViewSet(viewsets.ModelViewSet):
     serializer_class = MyUserSerializer
     queryset = MyUser.objects.all()
+
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
+    def like(self, request, pk=None):
+        user = self.request.user
+        queryset = user.like_events.all()
+        serializer = DevEventSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
 
 
 def github_login(request):

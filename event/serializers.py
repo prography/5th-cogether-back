@@ -8,6 +8,7 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['name']
 
+
 class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
