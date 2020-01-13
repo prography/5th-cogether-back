@@ -15,11 +15,7 @@ class Category(models.Model):
 class Photo(models.Model):
     photo = models.ImageField(upload_to=uuid_name_upload_to)
     original_url = models.URLField(unique=True)
-    
-    def __str__(self):
-        photo = Photo.objects.get(id=self.id)
-        event = DevEvent.objects.get(photo=photo)
-        return event.title
+
 
 MANUAL = 'manual'
 USERREQUEST = 'user_request'
@@ -56,7 +52,8 @@ class DevEvent(models.Model):
     host = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField(blank=True)
     photo = models.ForeignKey(Photo, null=True, on_delete=models.SET_NULL)
-    category = models.ForeignKey(Category, null=True, on_delete=models.SET_NULL)
+    category = models.ForeignKey(
+        Category, null=True, on_delete=models.SET_NULL)
 
     external_link = models.URLField(blank=True)
     location = models.CharField(max_length=200, blank=True)
