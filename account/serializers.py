@@ -61,6 +61,14 @@ class PasswordSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'password1': '새 비밀번호와 비밀번호 확인이 일치하지 않습니다.'})
         return data
 
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MyUser
+        fields = ['login_method', 'username', 'subscribe', 'avatar', 'social_avatar']
+        read_only_fields = ['login_method', 'email']
+
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
