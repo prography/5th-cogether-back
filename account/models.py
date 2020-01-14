@@ -48,5 +48,6 @@ class MyUser(AbstractUser):
     login_method = models.CharField(
         max_length=50, choices=LOGIN_CHOICES, default=LOGIN_EMAIL)
     like_events = models.ManyToManyField(DevEvent, related_name='like_event')
+    subscribe = models.BooleanField(default=True)
 
     objects = MyUserManager()

@@ -6,5 +6,5 @@ from account.models import MyUser
 @admin.register(MyUser)
 class MyUserAdmin(AuthUserAdmin):
     fieldsets = (
-        (None, {'fields': ('username', 'login_method', 'password', 'avatar', 'social_avatar', 'nickname',)}),
+        (None, {'fields': ('username', 'login_method', 'password', 'avatar', 'social_avatar', 'nickname', 'subscribe')}),
     )
