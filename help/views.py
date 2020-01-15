@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import viewsets, mixins
+from rest_framework import permissions
 
 from help.serializers import HelpCenterSerializer, HelpInfoSerializer
 from help.models import HelpCenter, FREQ, HelpInfo
@@ -7,6 +8,7 @@ from help.models import HelpCenter, FREQ, HelpInfo
 
 # Create your views here.
 class MyHelpCenterViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = HelpCenterSerializer
 
     def get_queryset(self):
