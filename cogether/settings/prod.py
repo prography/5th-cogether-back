@@ -33,3 +33,24 @@ DATABASES = {
     },
 }
 
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            # 'filename': '/home/user/app/5th-cogether-back/log/debug.log', log 파일 경로로 지정해줘
+            # 해당 경로에 django 로그가 쌓입니다. 에러나거나 할 때 들어가서 보면 용이
+            # Sentry도 붙이도록 할게용!
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
