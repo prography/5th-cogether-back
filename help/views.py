@@ -2,30 +2,18 @@ from django.contrib.auth import get_user_model
 from rest_framework import viewsets, mixins
 from rest_framework import permissions
 
-from help.serializers import HelpCenterSerializer, HelpInfoSerializer
-from help.models import HelpCenter, FREQ, HelpInfo
+from help.serializers import QuestionSerializer
+from help.models import Question
 
 
 # Create your views here.
-class MyHelpCenterViewSet(viewsets.ModelViewSet):
+class QuestionViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = HelpCenterSerializer
+    serializer_class = QuestionSerializer
 
     def get_queryset(self):
-        return HelpCenter.objects.filter(user=self.request.user.id)
+        return Question.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        request_data = self.request.data['user']
-        my_user = get_user_model().objects.get(pk=request_data)
-        serializer.save(user=my_user)
+        serializer.save(user=self.request.user)
 
-
-class FreqHelpCenterViewSet(viewsets.ModelViewSet):
-    serializer_class = HelpCenterSerializer
-    queryset = HelpCenter.objects.filter(type=FREQ)
-
-
-class HelpInfoViewSet(viewsets.GenericViewSet,
-                      mixins.ListModelMixin):
-    serializer_class = HelpInfoSerializer
-    queryset = HelpInfo.objects.all().order_by('id')
