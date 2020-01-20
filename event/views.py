@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 
 from rest_framework import generics, status, viewsets, filters
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -9,6 +9,9 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 # from rest_framework_simplejwt.authentication import JWTTokenUserAuthentication
 from event.models import Category, DevEvent
 from event.serializers import DevEventSerializer
+from event import get_new_events_from_festa as festa_crawling, get_new_events_from_meetup as meetup_crawling
+
+from datetime import datetime
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -43,3 +46,15 @@ class DevEventViewSet(viewsets.ModelViewSet):
         else:
             user.like_events.add(event)
         return Response(DevEventSerializer(event).data)
+
+    @action(detail=False, methods=['post'], permission_classes=[IsAdminUser])
+    def crawling(self, request):
+        start_time = datetime.now()
+        festa_message = festa_crawling.save_new_events_from_festa_dev_group()
+        meetup_message = meetup_crawling.save_new_events_from_meetup_dev_group(meetup_crawling.korea_meetup_dev_group)
+        return Response({'message': '크롤링이 종료되었습니다.',
+                         'detail': {'festa': festa_message,
+                                    'meetup': meetup_message,
+                                    'start_time': str(start_time),
+                                    'during': str(datetime.now() - start_time)}},
+                        status=status.HTTP_200_OK)

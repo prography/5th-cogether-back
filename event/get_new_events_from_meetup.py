@@ -1,21 +1,18 @@
 """
 MEETUP API: https://www.meetup.com/ko-KR/meetup_api/
 """
+from django.core.files.base import ContentFile
+from datetime import datetime, timedelta
+import requests
+from event.models import Category, Photo, DevEvent
+import django
 import os
 import sys
 sys.path.append('..')
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cogether.settings.dev")
 
-import django
 django.setup()
-
-
-from event.models import Category, Photo, DevEvent
-import requests
-from datetime import datetime, timedelta
-
-from django.core.files.base import ContentFile
 
 
 korea_meetup_dev_group = {
@@ -42,6 +39,8 @@ def save_new_events_from_meetup_dev_group(korea_meetup_dev_group):
     Arguments:
         korea_meetup_dev_group {dict} -- [meetup 국내 개발 그룹 이름]
     """
+    event_counter = 0
+
     for group in korea_meetup_dev_group:
         url = 'https://api.meetup.com/%s/events?&sign=true&photo-host=public&page=50&fields=group_key_photo,featured_photo' % (
             group)
@@ -59,6 +58,9 @@ def save_new_events_from_meetup_dev_group(korea_meetup_dev_group):
             if not_exists_event(event_dict['original_identity']):
                 meetup_crawling_event = DevEvent(**event_dict)
                 meetup_crawling_event.save()
+                event_counter += 1
+
+    return f'meetup에서 {event_counter}개의 데이터를 수집했습니다.'
 
 
 def get_photo_instance(response_json):
