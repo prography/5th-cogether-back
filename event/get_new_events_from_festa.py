@@ -1,21 +1,18 @@
 """
 FESTA API: https://festa.io/api/v1/events?page=1&pageSize=90&order=startDate&excludeExternalEvents=false
 """
+from django.core.files.base import ContentFile
+from datetime import datetime, timedelta
+import requests
+from event.models import Category, Photo, DevEvent
+import django
 import os
 import sys
 sys.path.append('..')
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cogether.settings.dev")
 
-import django
 django.setup()
-
-
-from event.models import Category, Photo, DevEvent
-import requests
-from datetime import datetime, timedelta
-
-from django.core.files.base import ContentFile
 
 
 def save_new_events_from_festa_dev_group():
@@ -25,6 +22,7 @@ def save_new_events_from_festa_dev_group():
     url = 'https://festa.io/api/v1/events?page=1&pageSize=50&order=startDate&excludeExternalEvents=false'
     response = requests.get(url)
     response_json = response.json()['rows']
+    event_counter = 0
 
     for event in response_json:
         event_dict = set_devevent_field_to_dict(event)
@@ -38,6 +36,9 @@ def save_new_events_from_festa_dev_group():
         if not_exists_event(event_dict['original_identity']):
             festa_crawling_event = DevEvent(**event_dict)
             festa_crawling_event.save()
+            event_counter += 1
+
+    return f'festa에서 {event_counter}개의 데이터를 수집했습니다.'
 
 
 def get_photo_instance(response_json):
@@ -119,8 +120,10 @@ def get_start_and_end_time(response_json):
     Returns:
         [datetime, datetime] -- [이벤트 시작시간, 이벤트 종료시간]
     """
-    start_at = datetime.fromisoformat(response_json['startDate'][:-1]) + timedelta(hours=9)
-    end_at = datetime.fromisoformat(response_json['endDate'][:-1]) + timedelta(hours=9)
+    start_at = datetime.fromisoformat(
+        response_json['startDate'][:-1]) + timedelta(hours=9)
+    end_at = datetime.fromisoformat(
+        response_json['endDate'][:-1]) + timedelta(hours=9)
     return start_at, end_at
 
 
@@ -146,7 +149,7 @@ def get_venue(venue_json):
 
 def get_event_link(response_json):
     if response_json['external'] == 'true':
-        return response_json['externalLink']    
+        return response_json['externalLink']
     return 'https://festa.io/events/{}'.format(response_json['eventId'])
 
 
