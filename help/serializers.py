@@ -1,19 +1,12 @@
 from rest_framework import serializers
 
-from help.models import HelpCenter, HelpInfo
+from help.models import Question
 
 
-class HelpCenterSerializer(serializers.ModelSerializer):
+class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = HelpCenter
-        fields = ('id', 'contents', 'title', 'source',
+        model = Question
+        fields = ('id', 'contents', 'title', 'type',
                   'created_at', 'updated_at', 'status',
-                  'answered_by', 'answer', 'user')
-        read_only_fields = ('id',)
-
-
-class HelpInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = HelpInfo
-        fields = ('id', 'contents')
+                  'answer')
         read_only_fields = ('id',)

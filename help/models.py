@@ -6,35 +6,30 @@ HELP = 'help'
 UPDATEREQUEST = 'update'
 CREATEREQUEST = 'create'
 
-DATA_SOURCE = [
-    (HELP, 'help'),
-    (UPDATEREQUEST, 'update'),
-    (CREATEREQUEST, 'create'),
+DATA_TYPE = [
+    (HELP, '1:1 요청'),
+    (UPDATEREQUEST, '수정 요청'),
+    (CREATEREQUEST, '게시 요청'),
 ]
 
-FREQ = 'freq'
-MY = 'my'
-
-DATA_ATTR = [
-    (FREQ, 'frequency-questions'),
-    (MY, 'my-questions'),
-]
-
-WT = 'waiting'
-CMP = 'completed'
+WAITING = 'waiting'
+COMPLETED = 'completed'
 
 DATA_STATUS = [
-    (WT, 'waiting'),
-    (CMP, 'completed'),
+    (WAITING, '답변 대기중'),
+    (COMPLETED, '답변 완료'),
 ]
 
 
-class HelpCenter(models.Model):
+class Answer(models.Model):
+    answer = models.TextField(blank=True)
+
+
+class Question(models.Model):
     contents = models.TextField()
     title = models.CharField(max_length=100)
-    source = models.CharField(max_length=30, choices=DATA_SOURCE, default=HELP)
-    type = models.CharField(max_length=40, choices=DATA_ATTR, default=MY)
-    status = models.CharField(max_length=40, choices=DATA_STATUS, default=WT)
+    type = models.CharField(max_length=30, choices=DATA_TYPE, default=HELP)
+    status = models.CharField(max_length=40, choices=DATA_STATUS, default=WAITING)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -44,9 +39,6 @@ class HelpCenter(models.Model):
         on_delete=models.CASCADE,
     )
 
-    answered_by = models.CharField(max_length=30, blank=True)
-    answer = models.TextField(blank=True)
-
-
-class HelpInfo(models.Model):
-    contents = models.TextField()
+    answer = models.ForeignKey(
+        Answer, on_delete=models.CASCADE, null=True
+    )

@@ -1,12 +1,12 @@
 from django.contrib import admin
 
-from help.models import HelpCenter, HelpInfo
+from help.models import Question, Answer
 
 
 # Register your models here.
 class HelpAdmin(admin.ModelAdmin):
-    list_display = ('source', 'title', 'contents')
+    list_display = ('title', 'status', 'type')
 
 
-admin.site.register(HelpCenter, HelpAdmin)
-admin.site.register(HelpInfo)
+admin.site.register(Question, HelpAdmin)
+admin.site.register(Answer)

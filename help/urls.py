@@ -8,9 +8,7 @@ from help import views
 app_name = 'help'
 
 router = DefaultRouter()
-router.register(r'info', views.HelpInfoViewSet, basename='info')
-router.register(r'freq', views.FreqHelpCenterViewSet, basename='freq')
-router.register(r'my-questions', views.MyHelpCenterViewSet, basename='my')
+router.register(r'me', views.QuestionViewSet, basename='me')
 
 urlpatterns = [
     path('', include(router.urls)),
