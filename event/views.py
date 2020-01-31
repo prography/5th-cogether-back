@@ -10,8 +10,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from event.models import Category, DevEvent
 from event.serializers import DevEventSerializer
 from event import get_new_events_from_festa as festa_crawling, get_new_events_from_meetup as meetup_crawling
-
-from datetime import datetime
+from event import send_email
+from datetime import datetime, timedelta
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -51,10 +51,33 @@ class DevEventViewSet(viewsets.ModelViewSet):
     def crawling(self, request):
         start_time = datetime.now()
         festa_message = festa_crawling.save_new_events_from_festa_dev_group()
-        meetup_message = meetup_crawling.save_new_events_from_meetup_dev_group(meetup_crawling.korea_meetup_dev_group)
+        meetup_message = meetup_crawling.save_new_events_from_meetup_dev_group(
+            meetup_crawling.korea_meetup_dev_group)
         return Response({'message': '크롤링이 종료되었습니다.',
                          'detail': {'festa': festa_message,
                                     'meetup': meetup_message,
                                     'start_time': str(start_time),
                                     'during': str(datetime.now() - start_time)}},
                         status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'], permission_classes=[IsAdminUser])
+    def email_to_subscriber(self, request):
+        send_email.test_email()
+        return Response({'message': '구독자들에게 메일이 전송되었습니다.'})
+
+from django.views.generic import ListView
+
+class EventListView(ListView):
+    model = DevEvent
+    template_name = 'event/cogether_subscribe_email.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        today = datetime.today()
+        created_last_week_event = DevEvent.objects.filter(
+            created_at__range=(today + timedelta(days=-7), today))
+        start_this_week_event = DevEvent.objects.filter(
+            start_at__range=(today, today + timedelta(days=7)))
+        context['created_last_week_event'] = created_last_week_event
+        context['start_this_week_event'] = start_this_week_event
+        return context

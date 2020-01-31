@@ -3,8 +3,32 @@ import datetime
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
+from django.core import mail
+from django.utils.html import strip_tags
+from django.template.loader import render_to_string
 
 from event.models import DevEvent
+
+
+def test_email():
+    today = datetime.datetime.today()
+    created_last_week_event = DevEvent.objects.filter(
+        created_at__range=(today + datetime.timedelta(days=-7), today))
+    start_this_week_event = DevEvent.objects.filter(
+        start_at__range=(today, today + datetime.timedelta(days=7)))
+
+    subject = 'Subject'
+    html_message = render_to_string(
+        'event/cogether_subscribe_email.html',
+        {'created_last_week_event': created_last_week_event,
+         'start_this_week_event': start_this_week_event})
+    plain_message = strip_tags(html_message)
+    from_email = 'cogether4@gmail.com'
+    # TODO: to에 subscribe 필드가 True인 일반 유저(admin 제외, is_active가 True)의 목록을 저장하기.
+    to = ['wlckd90@gmail.com', 'wlckdzlffj90@naver.com']
+
+    mail.send_mail(subject, plain_message, from_email,
+                   to, html_message=html_message)
 
 
 def send_emails():
