@@ -1,0 +1,8 @@
+{% autoescape off %}
+
+안녕하세요. Co.gether입니다.
+
+아래 링크를 클릭하여 계정을 활성화 하세요.
+
+http://{{ domain }}{% url 'account:activate' uidb64=uid token=token %}
+{% endautoescape %}

@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path, re_path, include
 
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import obtain_auth_token
@@ -12,6 +12,7 @@ router = DefaultRouter()
 router.register(r'', views.MyUserViewSet, 'account')
 
 urlpatterns = [
+    re_path('activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/', views.activate, name='activate'),
     path('api-token-auth/', obtain_auth_token),
     path('api/token/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

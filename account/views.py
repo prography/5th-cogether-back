@@ -7,9 +7,16 @@ from uuid import uuid4
 
 from django.conf import settings
 from django.core.files.base import ContentFile
+from django.core.mail import EmailMessage
 from django.contrib.auth import get_user_model
+from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import redirect
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_text
+from django.http import HttpResponse
 from django.http.response import HttpResponseBadRequest
+
 
 from rest_framework import viewsets
 from rest_framework import status
@@ -21,9 +28,11 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from account.serializers import (MyUserSerializer, MyTokenObtainPairSerializer,
-                                PasswordSerializer, ProfileSerializer)
+                                 PasswordSerializer, ProfileSerializer)
 from account.permissions import IsEmailloginUser
 from event.serializers import DevEventSerializer
+from .token import account_activation_token
+
 
 
 MyUser = get_user_model()
@@ -41,6 +50,21 @@ class MyUserViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = self.permission_classes
         return [permission() for permission in permission_classes]
+
+    def perform_create(self, serializer):
+        user = serializer.save()
+        current_site = get_current_site(self.request)
+        mail_subject = '[Co.gether] 계정 활성화 안내 메일'
+        message = render_to_string('account/acc_active_email.html', {
+            'user': user,
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            'token': account_activation_token.make_token(user),
+        })
+        to_email = user.username
+        email = EmailMessage(mail_subject, message, to=[to_email])
+        email.send()
+        return Response({'message': '인증 확인 메일 전송 완료'})
 
     @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
     def like(self, request, pk=None):
@@ -69,14 +93,14 @@ class MyUserViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['patch'],  permission_classes=[IsAuthenticated], url_path='update-profile', url_name='update-profile')
     def update_profile(self, request):
         user = self.request.user
-        serializer = ProfileSerializer(instance=user, data=request.data, partial=True)
+        serializer = ProfileSerializer(
+            instance=user, data=request.data, partial=True)
         if serializer.is_valid():
             user.subscribe = serializer.validated_data['subscribe']
             user.save()
             print(user.subscribe)
             return Response({'message': '메일 구독 기능이 변경되었습니다.'})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 def github_login(request):
@@ -138,6 +162,20 @@ def github_login_callback(request):
             'refresh': str(refresh),
             'access': str(refresh.access_token),
         }, status=status.HTTP_201_CREATED)
+
+
+def activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = MyUser.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, MyUser.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        return HttpResponse('계정이 활성화 되었습니다. 로그인 해주세요.')
+    else:
+        return HttpResponse('활성화 링크가 유효하지 않습니다.')
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
