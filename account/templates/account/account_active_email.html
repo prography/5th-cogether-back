@@ -1,0 +1,23 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Co.gether</title>
+</head>
+<body>
+	<img src="https://cogether1.s3-ap-northeast-1.amazonaws.com/custom/cogether_logo%404x.png" alt="대표이미지">
+	<h1>안녕하세요. Code + Together! cogether입니다. 💌💌💌</h1>
+	<br>
+    <p>아래 링크를 클릭하여 계정을 활성화 하세요. 활성화 후 로그인 페이지로 이동합니다.</p>
+	<br>
+	<a href="http://{{ domain }}{% url 'account:activate' uidb64=uid token=token %}">
+		http://{{ domain }}{% url 'account:activate' uidb64=uid token=token %}
+	</a>
+	<br>
+	<h1>🔥많은 관심 부탁드려요.🔥</h1>
+</body>
+</html>

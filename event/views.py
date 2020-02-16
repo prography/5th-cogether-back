@@ -6,7 +6,6 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework_simplejwt.authentication import JWTAuthentication
-# from rest_framework_simplejwt.authentication import JWTTokenUserAuthentication
 from event.models import Category, DevEvent
 from event.serializers import DevEventSerializer
 from event import get_new_events_from_festa as festa_crawling, get_new_events_from_meetup as meetup_crawling
@@ -62,22 +61,5 @@ class DevEventViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'], permission_classes=[IsAdminUser])
     def email_to_subscriber(self, request):
-        send_email.test_email()
-        return Response({'message': '구독자들에게 메일이 전송되었습니다.'})
-
-from django.views.generic import ListView
-
-class EventListView(ListView):
-    model = DevEvent
-    template_name = 'event/cogether_subscribe_email.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        today = datetime.today()
-        created_last_week_event = DevEvent.objects.filter(
-            created_at__range=(today + timedelta(days=-7), today))
-        start_this_week_event = DevEvent.objects.filter(
-            start_at__range=(today, today + timedelta(days=7)))
-        context['created_last_week_event'] = created_last_week_event
-        context['start_this_week_event'] = start_this_week_event
-        return context
+        number_of_subscriber = send_email.send_event_emails_to_subscribers()
+        return Response({'message': str(number_of_subscriber) + ' 명의 구독자들에게 메일이 전송되었습니다.'})

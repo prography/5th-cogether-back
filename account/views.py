@@ -6,6 +6,7 @@ import urllib.parse
 from uuid import uuid4
 
 from django.conf import settings
+from django.core import mail
 from django.core.files.base import ContentFile
 from django.core.mail import EmailMessage
 from django.contrib.auth import get_user_model
@@ -13,10 +14,10 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.html import strip_tags
 from django.utils.encoding import force_bytes, force_text
 from django.http import HttpResponse
 from django.http.response import HttpResponseBadRequest
-
 
 from rest_framework import viewsets
 from rest_framework import status
@@ -32,8 +33,6 @@ from account.serializers import (MyUserSerializer, MyTokenObtainPairSerializer,
 from account.permissions import IsEmailloginUser
 from event.serializers import DevEventSerializer
 from .token import account_activation_token
-
-
 
 MyUser = get_user_model()
 GITHUB_CLIENT_ID = settings.GITHUB_CLIENT_ID
@@ -51,20 +50,27 @@ class MyUserViewSet(viewsets.ModelViewSet):
             permission_classes = self.permission_classes
         return [permission() for permission in permission_classes]
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response({'message': '인증 메일 전송 완료. 계정을 활성화하려면 이메일을 확인하세요.'}, status=status.HTTP_201_CREATED)
+
     def perform_create(self, serializer):
         user = serializer.save()
         current_site = get_current_site(self.request)
-        mail_subject = '[Co.gether] 계정 활성화 안내 메일'
-        message = render_to_string('account/acc_active_email.html', {
+        subject = '[Co.gether] 계정 활성화 안내 메일'
+        html_message = render_to_string('account/account_active_email.html', {
             'user': user,
             'domain': current_site.domain,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': account_activation_token.make_token(user),
         })
-        to_email = user.username
-        email = EmailMessage(mail_subject, message, to=[to_email])
-        email.send()
-        return Response({'message': '인증 확인 메일 전송 완료'})
+        plain_message = strip_tags(html_message)
+        to = [user.username]
+        from_email = settings.EMAIL_HOST_USER
+
+        mail.send_mail(subject, plain_message, from_email, to, html_message=html_message)
 
     @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
     def like(self, request, pk=None):
@@ -173,9 +179,9 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        return HttpResponse('계정이 활성화 되었습니다. 로그인 해주세요.')
+        return redirect('https://cogether.kr/login')
     else:
-        return HttpResponse('활성화 링크가 유효하지 않습니다.')
+        return HttpResponse('활성화 링크가 유효하지 않습니다. <a href="https://cogether.kr/login">https://cogether.kr/login<a/> 에서 인증 재요청을 하세요.')
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
