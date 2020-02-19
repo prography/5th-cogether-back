@@ -1,0 +1,70 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Co.gether</title>
+</head>
+<body>
+	<img src="https://cogether1.s3-ap-northeast-1.amazonaws.com/custom/cogether_logo%404x.png" alt="대표이미지">
+	<h1>안녕하세요. Code + Together! cogether입니다. 💌💌💌</h1>
+
+	<h1>Cogether에서 국내 개발 행사 일정을 알려드립니다.🖥️🖥️</h1>
+
+	<h1>🔥많은 관심 부탁드려요.🔥</h1>
+
+	{% if created_last_week_event %}
+	<h2>지난주 수집한 개발 행사들🙉🙉</h2>
+	<table>
+		{% for event in created_last_week_event %}
+		<tr>
+			<td rowspan="2">
+				<a href="https://cogether.kr/{{event.category.name}}/detail/{{event.id}}">
+					<img src="{{ MEDIA_URL}}{{ event.photo.photo.url }}" style="width:70px; margin: 10px;">
+				</a>
+			</td>
+			<td>
+				<a href="https://cogether.kr/{{event.category.name}}/detail/{{event.id}}" style="text-decoration: none;">
+					{{ event.title }}
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<small>{{ event.start_at }} - {{ event.end_at }}</small>
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+	{% endif %}
+
+	{% if start_this_week_event %}
+	<h2>이번주 진행되는 개발 행사들🐣🐣</h2>
+	<table>
+		{% for event in start_this_week_event %}
+		<tr>
+			<td rowspan="2">
+				<a href="https://cogether.kr/{{event.category.name}}/detail/{{event.id}}">
+					<img src="{{ MEDIA_URL}}{{ event.photo.photo.url }}" style="width:70px; margin: 10px;">
+				</a>
+			</td>
+			<td>
+				<a href="https://cogether.kr/{{event.category.name}}/detail/{{event.id}}" style="text-decoration: none;">
+					{{ event.title }}
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<small>{{ event.start_at }} - {{ event.end_at }}</small>
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+	{% endif %}
+</body>
+
+</html>

@@ -37,6 +37,7 @@ class MyUserSerializer(serializers.ModelSerializer):
         except MyUser.DoesNotExist:
             user = MyUser.objects.create(username=validated_data['username'])
             user.set_password(password1)
+            user.is_active = False
             user.save()
             return user
 
