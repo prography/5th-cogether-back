@@ -1,5 +1,7 @@
 from django.db import models
 from django.conf import settings
+from cogether.storages import MediaStorage
+from cogether.utils import help_image_upload_to
 
 # Create your models here.
 HELP = 'help'
@@ -41,4 +43,15 @@ class Question(models.Model):
 
     answer = models.ForeignKey(
         Answer, on_delete=models.CASCADE, null=True
+    )
+
+    def __str__(self):
+        return self.title
+
+
+class HelpContentImage(models.Model):
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    image = models.FileField(
+        storage=MediaStorage(),
+        upload_to=help_image_upload_to
     )

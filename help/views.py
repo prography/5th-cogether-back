@@ -1,8 +1,7 @@
-from django.contrib.auth import get_user_model
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets
 from rest_framework import permissions
 
-from help.serializers import QuestionSerializer
+from help.serializers import QuestionSerializer, ImageSerializer
 from help.models import Question
 
 
@@ -17,3 +16,9 @@ class QuestionViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+
+class HelpImageViewSet(viewsets.ModelViewSet):
+    serializer_class = ImageSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()

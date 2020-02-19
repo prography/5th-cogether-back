@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from help.models import Question, Answer
+from help.models import Question, Answer, HelpContentImage
 
 
 # Register your models here.
@@ -10,3 +10,4 @@ class HelpAdmin(admin.ModelAdmin):
 
 admin.site.register(Question, HelpAdmin)
 admin.site.register(Answer)
+admin.site.register(HelpContentImage)

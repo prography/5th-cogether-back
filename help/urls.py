@@ -9,6 +9,7 @@ app_name = 'help'
 
 router = DefaultRouter()
 router.register(r'me', views.QuestionViewSet, basename='me')
+router.register(r'img', views.HelpImageViewSet, basename='img')
 
 urlpatterns = [
     path('', include(router.urls)),

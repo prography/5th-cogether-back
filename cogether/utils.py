@@ -29,3 +29,13 @@ def avatar_upload_to(instance, filename):
         userid_path,
         file_name+extension,
     ])
+
+
+def help_image_upload_to(instance, filename):
+    ymd_path = timezone.now().strftime('%Y/%m/%d/%H/%M')
+    uuid_name = uuid4().hex
+    extension = os.path.splitext(filename)[-1].lower()
+    return '/'.join([
+        ymd_path,
+        uuid_name + extension,
+    ])
